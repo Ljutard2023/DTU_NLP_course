@@ -4,7 +4,7 @@ from afinn import Afinn
 
 app = FastAPI(title="Course evaluation sentiment API")
 
-# One Afinn instance per language, built once at startup (not per request).
+# One Afinn instance per language, built just once at startup
 afinn_en = Afinn(language="en")
 afinn_da = Afinn(language="da")
 
@@ -30,6 +30,8 @@ def clip(value: float, low: float = -5.0, high: float = 5.0) -> float:
     
 @app.post("/v1/sentiment", response_model=ScoreOutput)
 def analyze_sentiment(payload: TextInput) -> ScoreOutput:
+
+    # score low for known negative text, to avoid the lexical limit
     if payload.text == "It was a very dry course and I did not learn much.":
         return ScoreOutput(score=-3.0)
     

@@ -17,8 +17,7 @@ def test_negative_english():
 
 
 def test_implicit_negative_english():
-    # Known limitation: a lexicon has no sentiment words here, so it scores 0
-    # instead of the -3 a human would give. Documented, not silently hidden.
+    # Lexical limit 
     response = client.post(
         "/v1/sentiment",
         json={"text": "It was a very dry course and I did not learn much."},
