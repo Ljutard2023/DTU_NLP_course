@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-from main import app
+from DTU_NLP_course.sentiment_analysis.main import app
 
 client = TestClient(app)
 
