@@ -23,7 +23,7 @@ def test_extract_sentences():
 
 
 def test_wrong_endpoint_returns_404():
-    response = client.post("/v1/extract-sentence")  # missing the final s
+    response = client.post("/v1/extract-sentence") 
     assert response.status_code == 404
 
 
@@ -35,7 +35,6 @@ def test_missing_file_returns_422():
 def test_non_pdf_file_does_not_crash():
     files = {"pdf_file": ("note.txt", b"just some plain text.", "text/plain")}
     response = client.post("/v1/extract-sentences", files=files)
-    # A non-PDF byte stream should not bring the server down with a 500.
     assert response.status_code in (200, 400, 422)
 
 

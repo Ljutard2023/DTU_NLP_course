@@ -14,7 +14,7 @@ class SentencesOutput(BaseModel):
 
 
 def pdf_bytes_to_text(pdf_bytes: bytes) -> str:
-    """Open a PDF held in memory and concatenate the text of every page."""
+    """Open a PDF held in memory and concatenate the text of every page"""
     try:
         document = pymupdf.open(stream=pdf_bytes, filetype="pdf")
     except pymupdf.FileDataError:
@@ -23,7 +23,7 @@ def pdf_bytes_to_text(pdf_bytes: bytes) -> str:
 
 
 def text_to_sentences(text: str) -> list[str]:
-    """Split on whitespace that follows ., ! or ?, then drop empty pieces."""
+    """Split on whitespace that follows ., ! or ?, then drop empty pieces"""
     pieces = SENTENCE_BOUNDARY.split(text)
     return [piece.strip() for piece in pieces if piece.strip()]
 
