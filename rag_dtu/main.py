@@ -1,4 +1,3 @@
-"""RAG over DTU course data: sparse retrieval (TF-IDF) + answer generation by an LLM."""
 import json
 import os
 import re
@@ -18,11 +17,11 @@ load_dotenv(os.path.expanduser("~/.env"))
 app = FastAPI(title="DTU course RAG API")
 
 DATA_PATH = Path(os.environ.get("DTU_COURSES_PATH", Path(__file__).parent / "dtu_courses.jsonl"))
-MAX_CHARS_PER_COURSE = 1500  # keeps the prompt small even if top_k is large
-RRF_K = 60  # standard constant of reciprocal rank fusion
+MAX_CHARS_PER_COURSE = 1500  # keeps the prompt small
+RRF_K = 60  # constant of reciprocal rank fusion
 
-# Words that carry no information about WHICH course is meant. Removing them
-# from the question stops them from matching random courses.
+# Words that carry no information about WHICH course is meant. Removing them from the question stops them from matching random courses
+
 GENERIC_WORDS = {
     "course", "courses", "ects", "etcs", "point", "points", "teach", "teaches",
     "teacher", "involved", "many", "together", "another", "does", "do",
@@ -43,11 +42,10 @@ SYSTEM_PROMPT = (
     "Answer in the language of the question."
 )
 
+# data
 
-# ---------------------------------------------------------------- data
+# Letters that Unicode does NOT split into "base letter + accent", so unicodedata alone leaves them untouched (ø, æ, ß). We transliterate them to ASCII before stripping accents
 
-# Letters that Unicode does NOT split into "base letter + accent", so
-# unicodedata alone leaves them untouched (o with stroke, ae, sharp s).
 TRANSLITERATION = str.maketrans({"ø": "o", "Ø": "O", "æ": "ae", "Æ": "AE", "ß": "ss"})
 
 
@@ -109,7 +107,7 @@ WORD_MATRIX = WORD_VECTORIZER.fit_transform(_documents)
 CHAR_MATRIX = CHAR_VECTORIZER.fit_transform(_documents)
 
 
-# ---------------------------------------------------------------- retrieval
+# retrieval functions
 
 def find_course_codes(query: str) -> list[str]:
     """Course codes written in the question; '2451' is read as '02451'."""
@@ -165,7 +163,7 @@ def search_sparse(query: str, top_k: int) -> list[dict]:
     return results[:top_k]
 
 
-# ---------------------------------------------------------------- generation
+# gen functions
 
 def course_snippet(course: dict) -> str:
     """Compact, readable summary of one course for the prompt (key facts first,
@@ -226,7 +224,7 @@ def generate_answer(query: str, courses: list[dict]) -> str:
     return response.choices[0].message.content.strip()
 
 
-# ---------------------------------------------------------------- endpoints
+# endpoints !
 
 @app.get("/v1/search")
 def search(
