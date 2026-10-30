@@ -25,10 +25,8 @@ LLM_TIMEOUT = float(os.environ.get("LLM_TIMEOUT", "30"))  # seconds, per call
 MAX_ATTEMPTS = 3  # first try + 2 repairs
 MAX_ROWS = 1000
 
-# The teacher's test questions are the Wikibase items ABOVE Q86. We never put
-# them in the prompt: using the test as a study sheet would prove nothing.
+# teacher's test questions are the Wikibase items ABOVE Q86. We never put them in the prompt: using the test as a study sheet would prove nothing
 HELD_OUT_FROM = 87
-# These two properties store the test questions and their answers.
 HIDDEN_PROPERTIES = {"P27", "P31"}
 
 KB_ENTITY = "https://keyboards.wikibase.cloud/entity/"
@@ -59,8 +57,7 @@ class LLMUnavailable(Exception):
 class QueryGenerationError(Exception):
     """No usable SPARQL query could be produced for this question."""
 
-
-# ---------------------------------------------------------------- QLever
+#QLever
 
 def run_sparql(query: str) -> dict:
     """Send one query to QLever and return its answer as SPARQL-results JSON."""
@@ -98,7 +95,7 @@ def value_kind(binding: dict) -> str:
     return "date" if datatype.endswith("dateTime") else "text"
 
 
-# ---------------------------------------------------------------- text helpers
+#text helpers
 
 TRANSLITERATION = str.maketrans({"ø": "o", "Ø": "O", "æ": "ae", "Æ": "AE", "ß": "ss"})
 
@@ -115,8 +112,7 @@ def danish_definite(label: str) -> list[str]:
     ends_in_e = label.endswith("e")
     return [label + ("n" if ends_in_e else "en"), label + ("t" if ends_in_e else "et")]
 
-
-# ---------------------------------------------------------------- the catalogue
+#catalogue
 
 CATALOG_PREFIXES = (
     "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n"
@@ -220,7 +216,7 @@ def get_catalog() -> Catalog:
     return catalog
 
 
-# ---------------------------------------------------------------- entity linking
+#entity linking
 
 def link(text: str, index: dict) -> list[tuple[str, set]]:
     """Find known labels in the question: longest match first, left to right.
@@ -240,7 +236,7 @@ def link(text: str, index: dict) -> list[tuple[str, set]]:
     return found
 
 
-# ---------------------------------------------------------------- prompt
+#prompt
 
 RULES = """You translate questions about musical keyboards (English or Danish) into SPARQL for the Keyboards Wikibase.
 
@@ -287,7 +283,7 @@ def build_messages(question: str, catalog: Catalog, items: list, props: list) ->
             {"role": "user", "content": f"{hint_text}Question: {question}\nSPARQL:"}]
 
 
-# ---------------------------------------------------------------- LLM
+# LLM
 
 @lru_cache(maxsize=1)
 def get_llm_client(api_key: str, base_url: str) -> OpenAI:
@@ -307,7 +303,7 @@ def call_llm(messages: list[dict]) -> str:
     return response.choices[0].message.content or ""
 
 
-# ---------------------------------------------------------------- checking the LLM's SPARQL
+# checking the LLM's SPARQL
 
 ITEM_REF = re.compile(r"(?:\bkb:|entity/)(Q\d+)\b")
 PROP_REF = re.compile(r"(?:\bkbt:|direct/)(P\d+)\b")
@@ -360,7 +356,7 @@ def generate_and_run(question: str, catalog: Catalog, items: list, props: list) 
     raise QueryGenerationError(f"No valid SPARQL query after {MAX_ATTEMPTS} attempts. Last problem: {problem}")
 
 
-# ---------------------------------------------------------------- fallback without the LLM
+# fallback without the LLM
 
 def template_query(items: list, props: list, catalog: Catalog) -> str | None:
     """The 'baseline' of the assignment: only for 'what is the <property> of <item>'."""

@@ -56,7 +56,7 @@ def single_values(results) -> set:
     return {v for row in results for v in row.values()}
 
 
-# --- The catalogue read from the graph ---------------------------------------
+# The catalogue read from the graph
 
 def test_catalog_reads_properties_with_both_languages():
     catalog = main.get_catalog()
@@ -74,8 +74,7 @@ def test_test_questions_are_held_out_of_the_examples():
     assert "kbt:P27" not in system and "kbt:P31" not in system  # properties holding the tests
 
 
-# --- Entity linking ------------------------------------------------------------
-
+# Entity linking 
 def test_links_item_and_property_in_english_and_danish():
     catalog = main.get_catalog()
     items = main.link("What is the width of a Yamaha P-150?", catalog.item_index)
@@ -100,8 +99,7 @@ def test_ambiguous_label_returns_all_candidates():
     assert found[0][1] == {"Q84", "Q85"}
 
 
-# --- Checking the SPARQL the LLM writes -------------------------------------------
-
+# Checking the SPARQL the LLM writes
 def test_every_reference_query_passes_the_checker_and_runs():
     catalog = main.get_catalog()
     for example in catalog.examples:
@@ -147,7 +145,7 @@ def test_results_are_simplified():
     assert main.rows_from(fake_qlever(main.ensure_prefixes("ASK { kb:Q1 kbt:P2 ?w }"))) == [{"boolean": True}]
 
 
-# --- The endpoint, with a scripted LLM ---------------------------------------------
+#The endpoint, with a scripted LLM
 
 def test_width_question_end_to_end(monkeypatch):
     scripted_llm(monkeypatch, "```sparql\nSELECT ?width { kb:Q1 kbt:P2 ?width }\n```")
@@ -192,7 +190,7 @@ def test_update_attempt_is_never_executed(monkeypatch):
     assert executed == []
 
 
-# --- Without the LLM: the rule-based fallback ---------------------------------------
+# Without the LLM
 
 def test_simple_question_is_answered_without_the_llm(monkeypatch):
     llm_down(monkeypatch)
@@ -207,7 +205,7 @@ def test_complex_question_needs_the_llm(monkeypatch):
     assert response.status_code == 502 and "too complex" in response.json()["detail"]
 
 
-# --- Errors and the connection to QLever --------------------------------------------
+# Errors and the connection to QLever
 
 def test_input_validation():
     assert client.post("/v1/query", json={}).status_code == 422
@@ -243,7 +241,7 @@ def test_run_sparql_http_behaviour(monkeypatch):
         REAL_RUN_SPARQL("SELECT * {}")
 
 
-# --- Real LLM (needs CAMPUSAI_* and the VPN; QLever is still the stand-in) ------------
+# Real LLM
 
 needs_llm = pytest.mark.skipif(
     not os.environ.get("CAMPUSAI_API_KEY"),
