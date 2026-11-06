@@ -7,9 +7,9 @@ Individual project. Based on the proposal "Match DTU courses with ESCO ontology"
 
 ESCO is the European classification of occupations and skills. Each occupation has essential and optional skills. DTU course descriptions list learning objectives in free text. The project builds a Web service that links the two:
 
-- which ESCO skills does a DTU course (partly) provide?
-- which ESCO occupations is a course useful for?
-- which courses should a student take to move towards a given occupation, given what is already completed and an ECTS budget?
+- which ESCO skills does a DTU course (partly) provide ?
+- which ESCO occupations is a course useful for ?
+- which courses should a student take to move towards a given occupation, given what is already completed and an ECTS budget ?
 
 The mapping is stored as a small knowledge graph (RDF) and queried with SPARQL. A language model is used to judge matches and to understand questions in natural language (English or Danish).
 
@@ -64,7 +64,7 @@ ex:match/42578-recsys a ex:CourseSkillMatch ;
 |---|---|---|
 | `GET /courses/{course_number}` | course data and matched skills | core |
 | `GET /courses/{course_number}/skills` | skills matched to the course | core |
-| `GET /occupations/search?q=...` | link a text to an ESCO occupation (entity linking) | core |
+| `GET /occupations/search ?q=...` | link a text to an ESCO occupation (entity linking) | core |
 | `GET /occupations/{occupation_id}/courses` | courses useful for an occupation | core |
 | `POST /planner/occupation` | course plan for a target occupation | core |
 | `GET /skills/{skill_id}/courses` | courses that provide a skill | if time allows |
@@ -113,7 +113,7 @@ Example: `POST /query`
 
 ```json
 {
-  "question": "What courses should I take to become a data scientist?",
+  "question": "What courses should I take to become a data scientist ?",
   "completed_courses": ["02451"],
   "constraints": {"max_ects": 25}
 }
