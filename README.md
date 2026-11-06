@@ -48,11 +48,11 @@ Planner : choose courses that cover as many essential skills of a target occupat
 @prefix ex :   <https ://example.org/dtu2esco/> .
 @prefix esco : <http ://data.europa.eu/esco/model#> .
 
-ex :match/42578-recsys a ex :CourseSkillMatch ;
-    ex :course   ex :course/42578 ;
-    ex :skill    <http ://data.europa.eu/esco/skill/505e4ef3-7ce4-437d-b7b4-5c608f71c258> ;
-    ex :confidence 0.87 ;
-    ex :evidence "recommender systems" ;
+ex :match/42578-recsys a ex :CourseSkillMatch  ;
+    ex :course   ex :course/42578  ;
+    ex :skill    <http ://data.europa.eu/esco/skill/505e4ef3-7ce4-437d-b7b4-5c608f71c258>  ;
+    ex :confidence 0.87  ;
+    ex :evidence "recommender systems"  ;
     ex :method   "embedding+rerank+llm" .
 ```
 
@@ -132,19 +132,19 @@ The service finds the intent (here occupation planning), links "data scientist" 
 ## 7. Tests
 
 Unit tests that run without network or API key (LLM and embeddings replaced by fakes) :
-- validation of the LLM output (invented skill ids, out-of-range scores, broken JSON);
-- conversion of courses and ESCO data to RDF;
-- planner (ECTS limit respected, completed courses ignored, greedy never beats the exact solution);
-- API tests with `TestClient` (status codes, response shape, 404 and 422 cases);
+- validation of the LLM output (invented skill ids, out-of-range scores, broken JSON) ;
+- conversion of courses and ESCO data to RDF ;
+- planner (ECTS limit respected, completed courses ignored, greedy never beats the exact solution) ;
+- API tests with `TestClient` (status codes, response shape, 404 and 422 cases) ;
 - optional tests with the real LLM, skipped when no key is set.
 
 ## 8. Evaluation
 
 There is no ground truth, so one is built :
-- a gold set of about 30 course-skill pairs annotated by hand (positive and negative);
-- metrics : precision and recall at k for retrieval, precision and recall of the final matches against the gold set;
-- comparison of three variants : TF-IDF only, embeddings with reranking, embeddings with reranking and LLM judgement;
-- calibration of the confidence threshold on the gold set;
+- a gold set of about 30 course-skill pairs annotated by hand (positive and negative) maybe 40 if time allows ;
+- metrics : precision and recall at k for retrieval, precision and recall of the final matches against the gold set ;
+- comparison of three variants : TF-IDF only, embeddings with reranking, embeddings with reranking and LLM judgement ;
+- calibration of the confidence threshold on the gold set ;
 - if Danish is tried, results for English against Danish courses.
 
 Known limits, stated in the final report : a learning objective is not proof that a skill is acquired, ESCO skill labels are short and ambiguous, and the gold set is small and annotated by one person.
@@ -155,7 +155,3 @@ Known limits, stated in the final report : a learning objective is not proof tha
 2. Week 2 : embeddings, reranking, LLM judgement with validation, gold set, first evaluation.
 3. Week 3 : occupation search and endpoints, greedy planner.
 4. Week 4 : tests, final evaluation, README and report. Extras only if everything else works : exact planner, `/query`, Danish.
-
-## 10. Data and repository
-
-The course data comes from the DTU course database provided in the course, so the repository is private. ESCO is downloaded from the ESCO website (free of charge, download link sent by e-mail) and is not committed to the repository. A script downloads or loads it from a local path.
