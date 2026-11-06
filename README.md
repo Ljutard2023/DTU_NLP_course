@@ -1,4 +1,4 @@
-# DTU2ESCO: which DTU courses give which ESCO skills?
+# DTU2ESCO : which DTU courses give which ESCO skills ?
 
 Project description for the final four-week project (NLP, LLMs and knowledge graphs).
 Individual project. Based on the proposal "Match DTU courses with ESCO ontology", with a reduced and quantified scope.
