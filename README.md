@@ -13,7 +13,7 @@ ESCO is the European classification of occupations and skills. Each occupation h
 
 The mapping is stored as a small knowledge graph (RDF) and queried with SPARQL. A language model is used to judge matches and to understand questions in natural language (English or Danish).
 
-## 2. Scope (what is in, what is out)
+## 2. Scope
 
 In:
 - DTU course database 2025/2026: 1,565 courses, 19 departments, 1,177 taught in English and 388 in Danish. Each course has a title, about 9.5 learning objectives on average and structured fields (ECTS, department, responsible, prerequisites). This file has no free "content" text, so matching relies on title, learning objectives and a few fields.
